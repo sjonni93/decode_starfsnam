@@ -1,0 +1,29 @@
+Ef lengdin á bæði alt og reference er einn þá er þetta snippur
+Ef lengdin á öðrum hvorum er > 1 þá er þetta annaðhvort insertion eða deletion
+Ef reference er > 1 er þetta deletion
+ef alternative er > 1 er þetta insertion
+ef bæði þá köllum við þetta complex.
+
+0/0:40,0:40:120:0,120,255
+
+Fyrst er hvernig þetta erfist. Hér er einstaklingurinn með tvo litninga með reference
+40 þýðir fjöldi read-a sem styðja reference
+0 er fjöldi read-a sem styðja alternative
+40 er svo heildarfjöldi read-a
+120 er quality gildi þessara köllunar
+Næstu 3 tölurnar eru fred scaled líkindi á 0/0, 0/1(eða 1/0) og 1/1
+
+
+4 Different molucles that are made up in DNA are adenine(A), cytosie (C), guanine (G), thymine (T)
+
+A with T: the purine adenine (A) always pairs with the pyrimidine thymine (T)
+C with G: the pyrimidine cytosine (C) always pairs with the purine guanine (G)
+
+
+ef það eru > 2 allele, þá testum við:
+Refrence allele eða ekki ref
+alt 1 eða ekki alt 1
+alt 2 eða ekki alt 2
+osfrv
+
+
