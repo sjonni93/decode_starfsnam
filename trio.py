@@ -62,6 +62,7 @@ def statistic_tests(record, fjoldi_samples, target_allele, items):
 	H = 0
 	Q = 0
 	harwey_chi = 0
+	hardy_flag = ''
 
 
 	for sample in vcf_reader.samples:
@@ -88,6 +89,14 @@ def statistic_tests(record, fjoldi_samples, target_allele, items):
 
 	if expected_1 > 0 and expected_2 > 0 and expected_3 > 0:
 		harwey_chi = (P-expected_1)**2/expected_1 + (H-expected_2)**2/expected_2 + (Q-expected_3)**2/expected_3
+
+	if harwey_chi > 3.84:
+		hardy_flag = 'stenst ekki'
+	else:
+		hardy_flag = 'stenst'
+
+	#ef hardy scoreid er > 3.84 tha neitum vid nulltilgatunni og segjum ad thad se munur (thetta er 95% confidence) a observed
+	# og expected. ef thad er minna segjum vid ad thad se ekki munur
 
 	o1 = 0
 	o2 = 0
@@ -221,7 +230,7 @@ def statistic_tests(record, fjoldi_samples, target_allele, items):
 
 	prent_var = trio_listi + gildi
 
-	print (record.ID + ':' + str(target_allele), harwey_chi, *prent_var, sep = "\t" )
+	print (record.ID + ':' + str(target_allele), record.REF, record.ALT[target_allele-1], harwey_chi, hardy_flag, *prent_var, sep = "\t" )
 #-----------------------------------------------------------------------------------------------------------------
 
 
@@ -243,7 +252,7 @@ if args.trio is not None:
 
 prenti_listi = prent_trio + items
 
-print ('ID', "Variant H.W C.S.S", *prenti_listi, sep = "\t" )
+print ('ID', 'Reference Allele', 'Alternative allele', "Variant H.W C.S.S", 'H.W flag', *prenti_listi, sep = "\t" )
 
 fjoldi_samples = len(vcf_reader.samples)
 
