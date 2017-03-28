@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 from __future__ import division
 from __future__ import print_function
 import vcf
@@ -62,7 +64,7 @@ def statistic_tests(record, fjoldi_samples, target_allele, items):
 	H = 0
 	Q = 0
 	harwey_chi = 0
-	flags = []
+	flags = ''
 
 
 	for sample in vcf_reader.samples:
@@ -91,7 +93,7 @@ def statistic_tests(record, fjoldi_samples, target_allele, items):
 		harwey_chi = (P-expected_1)**2/expected_1 + (H-expected_2)**2/expected_2 + (Q-expected_3)**2/expected_3
 
 	if harwey_chi > 3.84:
-		flags.append('H')
+		flags = flags.join('h')
 
 	#ef hardy scoreid er > 3.84 tha neitum vid nulltilgatunni og segjum ad thad se munur (thetta er 95% confidence) a observed
 	# og expected. ef thad er minna segjum vid ad thad se ekki munur
@@ -176,10 +178,10 @@ def statistic_tests(record, fjoldi_samples, target_allele, items):
 	else:
 		chi_statistic_type3 = 'n/a' #thvi vid erum tha ad deila med nulli, spurning um tulkun a thvi 
 
-	if chi_statistic_type2 > 3.84:
-		flags.append('2')
-	if chi_statistic_type3 > 3.84:
-		flags.append('3')
+	if chi_statistic_type2 > 3.84 and type(chi_statistic_type2) == float:
+		flags = flags.join('h')
+	if chi_statistic_type3 > 3.84 and type(chi_statistic_type3) == float:
+		flags = flags.join('h')
 
 	if args.twins is not None:
 		twins_passar = 0
@@ -245,6 +247,7 @@ variants = {}
 
 items = []
 prent_trio = []
+prent_alltaf = ['ID', 'Reference Allele', 'Alternative allele', "Variant H.W C.S.S", 'flags']
 
 if args.info_list is not None:
 	items = args.info_list
@@ -252,9 +255,9 @@ if args.info_list is not None:
 if args.trio is not None:
 	prent_trio = ['#Type 1', "# Consistent Type1", "Inconsistent Type1", "# Type 2", "# Consistent Type2", "Inconsistent Type2", "Type 2 Chi Square Statistic" "# Type 3", "# Consistent Type3", "Inconsistent Type3" "Type 3 Chi Square Statistic"]
 
-prenti_listi = prent_trio + items
+prenti_listi = prent_alltaf + prent_trio + items
 
-print ('ID', 'Reference Allele', 'Alternative allele', "Variant H.W C.S.S", 'flags', *prenti_listi, sep = "\t" )
+print (*prenti_listi , sep = "\t" )
 
 fjoldi_samples = len(vcf_reader.samples)
 
