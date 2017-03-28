@@ -257,7 +257,7 @@ if args.info_list is not None:
 	items = args.info_list
 
 if args.trio is not None:
-	prent_trio = ['#Type 1', "# Consistent Type1", "Inconsistent Type1", "# Type 2", "# Consistent Type2", "Inconsistent Type2", "Type 2 Chi Square Statistic" "# Type 3", "# Consistent Type3", "Inconsistent Type3" "Type 3 Chi Square Statistic"]
+	prent_trio = ['#Type 1', "# Consistent Type1", "Inconsistent Type1", "# Type 2", "# Consistent Type2", "Inconsistent Type2", "Type 2 Chi Square Statistic", "# Type 3", "# Consistent Type3", "Inconsistent Type3", "Type 3 Chi Square Statistic"]
 
 prenti_listi = prent_alltaf + prent_trio + items
 
