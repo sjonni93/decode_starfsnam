@@ -65,12 +65,15 @@ def statistic_tests(record, fjoldi_samples, target_allele, items):
 	Q = 0
 	harwey_chi = 0
 	flags = ''
+	missing_triocalls = 0
+	missing_calls = 0
 
 
 	for sample in vcf_reader.samples:
 		allele =  record.genotype(sample)['GT'].split("/")
 
 		if "." in allele:
+			missing_calls += 1
 			continue
 
 		count = allele.count(str(target_allele))
@@ -93,7 +96,7 @@ def statistic_tests(record, fjoldi_samples, target_allele, items):
 		harwey_chi = (P-expected_1)**2/expected_1 + (H-expected_2)**2/expected_2 + (Q-expected_3)**2/expected_3
 
 	if harwey_chi > 3.84:
-		flags = flags.join('h')
+		flags += 'H'
 
 	#ef hardy scoreid er > 3.84 tha neitum vid nulltilgatunni og segjum ad thad se munur (thetta er 95% confidence) a observed
 	# og expected. ef thad er minna segjum vid ad thad se ekki munur
@@ -111,6 +114,7 @@ def statistic_tests(record, fjoldi_samples, target_allele, items):
 			father_gt = record.genotype(samples[2])['GT'].split("/")
 
 			if "." in child_gt or "." in mother_gt or "." in father_gt:
+				missing_triocalls += 1
 				continue
 
 			#fallid check_consistency lista sem telur consistency. Thegar vid erum bara med einn reference tha er annadhvort 1 i consistent eda
@@ -179,9 +183,9 @@ def statistic_tests(record, fjoldi_samples, target_allele, items):
 		chi_statistic_type3 = 'n/a' #thvi vid erum tha ad deila med nulli, spurning um tulkun a thvi 
 
 	if chi_statistic_type2 > 3.84 and type(chi_statistic_type2) == float:
-		flags = flags.join('h')
+		flags += '2'
 	if chi_statistic_type3 > 3.84 and type(chi_statistic_type3) == float:
-		flags = flags.join('h')
+		flags += '3'
 
 	if args.twins is not None:
 		twins_passar = 0
@@ -234,7 +238,7 @@ def statistic_tests(record, fjoldi_samples, target_allele, items):
 
 	prent_var = trio_listi + gildi
 
-	print (record.ID + ':' + str(target_allele), record.REF, record.ALT[target_allele-1], harwey_chi, flags, *prent_var, sep = "\t" )
+	print (record.ID + ':' + str(target_allele), record.REF, record.ALT[target_allele-1], missing_calls, missing_triocalls, harwey_chi, flags, *prent_var, sep = "\t" )
 #-----------------------------------------------------------------------------------------------------------------
 
 
@@ -247,7 +251,7 @@ variants = {}
 
 items = []
 prent_trio = []
-prent_alltaf = ['ID', 'Reference Allele', 'Alternative allele', "Variant H.W C.S.S", 'flags']
+prent_alltaf = ['ID', 'Reference Allele', 'Alternative allele','missing calls', 'missing_triocalls', "Variant H.W C.S.S", 'flags']
 
 if args.info_list is not None:
 	items = args.info_list
