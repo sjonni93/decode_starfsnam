@@ -97,6 +97,11 @@ def statistic_tests(record, fjoldi_samples, target_allele, items):
 
 	if harwey_chi > 3.84:
 		flags += 'H'
+	if H > expected_2:
+			flags += 'T'
+	else:
+			flags += 'M'
+
 
 	#ef hardy scoreid er > 3.84 tha neitum vid nulltilgatunni og segjum ad thad se munur (thetta er 95% confidence) a observed
 	# og expected. ef thad er minna segjum vid ad thad se ekki munur
