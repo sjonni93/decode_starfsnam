@@ -200,7 +200,18 @@ def statistic_tests(record, fjoldi_samples, target_allele, items):
 	if args.info_list is not None:
 		for bla in items:
 			if bla in record.INFO:
-				gildi.append(record.INFO[bla])
+				if type(record.INFO[bla]) is list:
+					if len(record.INFO[bla]) == len(record.ALT):
+						gildi.append(record.INFO[bla][target_allele-1])
+					elif len(record.INFO[bla]) == len(record.ALT) + 1:
+						gildi.append(record.INFO[bla][target_allele])
+					else:
+						gildi.append(record.INFO[bla])
+				else: 
+					gildi.append(record.INFO[bla])
+			else:
+				gildi.append('n/a')
+
 
 	#hendum ollum upplysingunum inn i global dictionary sem geymir thaer
 	trio_listi = []
@@ -253,7 +264,7 @@ for record in vcf_reader:
 		statistic_tests(record, fjoldi_samples, 1, items)
 	else:
 		for i in range(len(record.ALT)):
-			statistic_tests(record, fjoldi_samples, i, items)
+			statistic_tests(record, fjoldi_samples, i+1, items)
 
 	allele_len_1 = sum(len(i) == 1 for i in record.ALT) + int(len(record.REF) == 1)
 
